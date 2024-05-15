@@ -1,0 +1,55 @@
+version: '3.2'
+services:
+  rabbitmq_bootcamp:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+    container_name: rabbitmq_bootcamp
+    networks:
+      - backend
+  postgres_bootcamp:
+    image: postgres:10.6
+    ports:
+      - 5432:5432
+    container_name: postgres_bootcamp
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+  bootcamp-user-api:
+    image: rafaelsaraivamielczarski/app-user-api:latest
+    ports:
+      - 8081:8081
+    container_name: app-user-api
+    environment:
+      - RABBIT_HOST=rabbitmq_bootcamp
+      - POSTGRES_URL=postgres_bootcamp
+      - POSTGRES_USER=bootcamp
+      - POSTGRES_PASSWORD=bootcamppass
+      - POSTGRES_DATABASE=bootcamp
+    depends_on:
+      - postgres_bootcamp
+    networks:
+      - backend
+  bootcamp-integration-api:
+    image: rafaelsaraivamielczarski/app-integration-api:latest
+    ports:
+      - 8082:8082
+    container_name: app-integration-api
+    environment:
+      - RABBIT_HOST=rabbitmq_bootcamp
+      - POSTGRES_URL=postgres_bootcamp
+      - POSTGRES_USER=bootcamp
+      - POSTGRES_PASSWORD=bootcamppass
+      - POSTGRES_DATABASE=bootcamp
+    depends_on:
+      - postgres_bootcamp
+    networks:
+      - backend
+networks:
+  backend:
+    driver: "bridge"
+volumes:
+  pgdata:

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: BootCamp Sysmap 2024 - Rafael Saraiva
+    main:
+      allow-bean-definition-overriding: true
+      allow-circular-references: true
+
+server:
+  port: 8081
+  servlet:
+    context-path: /api
