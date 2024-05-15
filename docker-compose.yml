@@ -1,4 +1,4 @@
-version: '3.2'
+version: "3.2"
 services:
   rabbitmq_bootcamp:
     image: rabbitmq:3-management
@@ -9,17 +9,14 @@ services:
     networks:
       - backend
   postgres_bootcamp:
-    image: postgres:10.6
+    image: rafaelsaraivamielczarski/postgres:latest
     ports:
       - 5432:5432
     container_name: postgres_bootcamp
-    volumes:
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata:/var/lib/postgresql/data
     networks:
       - backend
   bootcamp-user-api:
-    image: rafaelsaraivamielczarski/app-user-api:latest
+    image: rafaelsaraivamielczarski/app-user-api:1.0.1
     ports:
       - 8081:8081
     container_name: app-user-api
@@ -34,7 +31,7 @@ services:
     networks:
       - backend
   bootcamp-integration-api:
-    image: rafaelsaraivamielczarski/app-integration-api:latest
+    image: rafaelsaraivamielczarski/app-integration-api:1.0.3
     ports:
       - 8082:8082
     container_name: app-integration-api
